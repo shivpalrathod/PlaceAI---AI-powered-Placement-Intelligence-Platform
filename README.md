@@ -266,65 +266,47 @@ Automatically evaluates eligibility based on:
 
 ---
 
-# 📸 Screenshots
+## 🖼️ Screenshots
 
-## Dashboard
+### Dashboard
 
 ![Dashboard](screenshots/dashboard.png)
 
----
-
-## Analytics Dashboard
+### Analytics Dashboard
 
 ![Analytics](screenshots/analytics.png)
 
----
+### AI Placement Profile
 
-## Resume AI
+![Profile](screenshots/profile.png)
 
-![Resume AI](screenshots/resume-ai.png)
-
----
-
-## AI Job Recommendations
+### Job Recommendations
 
 ![Jobs](screenshots/jobs.png)
 
----
-
-## AI Internship Recommendations
+### Internship Recommendations
 
 ![Internships](screenshots/internships.png)
 
----
+### Company Intelligence
 
-## Company Intelligence
+![Company Intelligence](screenshots/company-intel.png)
 
-![Company Intelligence](screenshots/company-intelligence.png)
+### Skill Gap Analysis
 
----
+![Skill Gap Analysis](screenshots/skill-gap.png)
 
-## Skill Gap Analysis
+### Career AI Agent
 
-![Skill Gap Analysis](screenshots/skill-gap-analysis.png)
+![Career AI Agent](screenshots/ai-agent.png)
 
----
-
-## Career AI Agent
-
-![Career AI Agent](screenshots/career-ai-agent.png)
-
----
-
-## Job Match Engine
+### Job Match Engine
 
 ![Job Match](screenshots/job-match.png)
 
----
+### Eligibility Checker
 
-## Eligibility Checker
-
-![Eligibility Checker](screenshots/eligibility-checker.png)
+![Eligibility Checker](screenshots/eligibility.png)
 
 ---
 
