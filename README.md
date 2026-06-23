@@ -1,35 +1,49 @@
 # 🚀 PlaceAI – AI-Powered Placement Intelligence Platform
 
 <p align="center">
-  <h3 align="center">Smart Placement Management with AI-Powered Career Guidance</h3>
+  <h3 align="center">AI-Driven Career Intelligence & Placement Management System</h3>
   <p align="center">
-    ATS Analysis • Job Matching • Internship Recommendations • Skill Gap Analysis • Company Intelligence • Career AI Agent
+    Resume Analysis • Job Matching • Internship Recommendations • Skill Gap Analysis • Company Intelligence • Career AI Agent
   </p>
 </p>
 
 ---
 
-## 📌 Overview
+## 🌟 Overview
 
-PlaceAI is an AI-powered Placement Intelligence Platform designed to modernize campus recruitment and student career preparation.
+PlaceAI is a full-stack Placement Intelligence Platform that combines traditional placement management workflows with AI-powered career guidance.
 
-The platform combines traditional placement management features with advanced AI capabilities to help students improve placement readiness, optimize resumes, discover suitable jobs and internships, identify skill gaps, and prepare for recruitment processes.
+The platform helps students improve placement readiness through ATS resume analysis, job matching, internship recommendations, skill gap analysis, company intelligence, eligibility checking, and AI-based career assistance.
 
-Built using Node.js, Express.js, MongoDB, EJS, Bootstrap, Tailwind CSS, and Google Gemini AI.
+Built using **Node.js, Express.js, MongoDB, EJS, Bootstrap, Tailwind CSS, Chart.js, and Google Gemini AI**.
 
 ---
 
-# ✨ Core Features
+## 🎯 Key Highlights
+
+* Developed a complete Placement Management System with AI-powered career intelligence.
+* Integrated ATS Resume Analysis with skill extraction and readiness scoring.
+* Built Job Matching and Internship Recommendation engines.
+* Implemented Skill Gap Analysis and personalized learning recommendations.
+* Developed Company Intelligence module with hiring insights.
+* Added Eligibility Checker based on CGPA, backlogs, and required skills.
+* Integrated Google OAuth and Session Authentication.
+* Designed interactive analytics dashboards using Chart.js.
+* Built responsive UI optimized for students and placement teams.
+
+---
+
+# ✨ Core Modules
 
 ## 🎓 Student Management
 
-* Student Registration & Profile Management
-* Academic Record Management
-* CGPA Tracking
+* Student Profile Management
+* Academic Information Tracking
+* CGPA Monitoring
 * Backlog Tracking
 * Resume Upload & Management
-* Skill Management
-* Placement Readiness Monitoring
+* Skills Management
+* Placement Readiness Tracking
 
 ---
 
@@ -37,32 +51,31 @@ Built using Node.js, Express.js, MongoDB, EJS, Bootstrap, Tailwind CSS, and Goog
 
 * Company Registration
 * Hiring Criteria Management
-* Eligibility Requirements
-* Placement Drive Tracking
-* Recruitment Workflow Management
+* Placement Drive Management
+* Recruitment Workflow Tracking
+* Eligibility Configuration
 
 ---
 
 ## 📅 Interview Management
 
 * Interview Scheduling
-* Interview Tracking
-* Company-wise Interviews
-* Placement Drive Management
-* Candidate Selection Tracking
+* Candidate Tracking
+* Company-wise Interview Management
+* Placement Drive Coordination
+* Recruitment Progress Monitoring
 
 ---
 
-## 📊 Placement Analytics Dashboard
+## 📊 Analytics Dashboard
 
-* Student Statistics
+* Placement Readiness Statistics
 * ATS Score Distribution
-* Placement Readiness Analysis
+* Skill Demand Analysis
 * Job Market Insights
 * Internship Analytics
-* Skill Demand Analytics
-* Company Hiring Analytics
-* Placement Performance Metrics
+* Hiring Trend Analysis
+* Student Performance Metrics
 
 ---
 
@@ -70,97 +83,68 @@ Built using Node.js, Express.js, MongoDB, EJS, Bootstrap, Tailwind CSS, and Goog
 
 ## 📄 AI Resume Analyzer
 
-Upload a PDF resume and receive:
-
-### Features
-
-* Resume Parsing
-* ATS Score Generation
-* Resume Strength Analysis
-* Resume Weakness Detection
-* Skill Extraction
-* Placement Readiness Analysis
-* Resume Improvement Suggestions
-
-### Output
+Upload a resume and receive:
 
 * ATS Score
-* Readiness Percentage
-* Extracted Skills
-* Strengths
-* Weaknesses
-* Recommended Improvements
+* Skill Extraction
+* Resume Strength Analysis
+* Weakness Detection
+* Readiness Assessment
+* Improvement Suggestions
 
 ---
 
 ## 💼 AI Job Recommendation Engine
 
-Provides personalized job recommendations based on student skills.
+Provides personalized job recommendations based on student profiles.
 
 ### Features
 
 * Skill Matching
 * Match Percentage Calculation
-* Hiring Probability Estimation
+* Hiring Probability Prediction
 * Missing Skill Detection
-* Personalized Recommendations
-
-### Example
-
-```text
-Role: Software Engineer
-
-Match Score: 80%
-
-Matched Skills:
-✓ Python
-✓ SQL
-✓ Git
-
-Missing Skills:
-✗ Docker
-✗ AWS
-```
+* Career Recommendations
 
 ---
 
 ## 🎯 AI Internship Recommendation Engine
 
-Recommends internships based on:
+Recommends internships using:
 
-* Skills
 * Resume Analysis
+* Skills Assessment
 * Career Interests
-* Placement Readiness
+* Readiness Metrics
 
-### Displays
+### Output
 
-* Company
+* Company Name
 * Role
-* Duration
 * Stipend
+* Duration
 * Match Percentage
 
 ---
 
 ## 🧠 Skill Gap Analysis
 
-Analyzes student skills against industry requirements.
+Analyzes current skills against industry requirements.
 
 ### Features
 
-* Skill Comparison
 * Missing Skill Detection
 * Career Roadmap Generation
 * Learning Recommendations
-* Placement Readiness Assessment
+* Placement Readiness Evaluation
 
 ### Supported Career Paths
 
-* Software Developer
+* Software Engineer
 * Full Stack Developer
 * Backend Developer
 * Frontend Developer
+* Data Analyst
 * Data Scientist
 * DevOps Engineer
 
@@ -168,19 +152,18 @@ Analyzes student skills against industry requirements.
 
 ## 🏢 Company Intelligence
 
-Provides detailed company insights.
+Provides detailed hiring insights for major companies.
 
-### Features
+### Information Available
 
-* Company Profiles
 * Hiring Process
-* Interview Rounds
-* Package Information
 * Required Skills
-* Hiring Difficulty
+* Interview Rounds
 * Selection Criteria
+* Hiring Difficulty
+* Package Information
 
-### Companies Included
+### Supported Companies
 
 * Google
 * Microsoft
@@ -190,42 +173,26 @@ Provides detailed company insights.
 * TCS
 * Wipro
 * Cognizant
-* Accenture
 * Deloitte
 * IBM
+* Accenture
 * Capgemini
-* Tech Mahindra
 * HCL
 
 ---
 
 ## 🤖 Career AI Agent
 
-An intelligent career assistant powered by AI.
+AI-powered assistant for career guidance.
 
 ### Capabilities
 
-* Career Guidance
-* Resume Improvement Suggestions
-* Placement Readiness Advice
+* Resume Improvement Advice
+* Placement Readiness Guidance
 * Job Recommendations
 * Internship Recommendations
+* Career Roadmaps
 * Interview Preparation Guidance
-* Skill Development Suggestions
-
-### Example Questions
-
-```text
-What jobs match my profile?
-
-How can I improve my ATS score?
-
-Which skills should I learn next?
-
-Am I placement ready?
-
-How do I prepare for Infosys interviews?
-```
 
 ---
 
@@ -239,26 +206,26 @@ VS
 
 Company Requirements
 
-### Outputs
+### Output
 
 * Match Percentage
 * Matched Skills
 * Missing Skills
 * Hiring Probability
-* Placement Readiness
+* Readiness Score
 
 ---
 
-## ✅ Placement Eligibility Checker
+## ✅ Eligibility Checker
 
-Automatically evaluates eligibility based on:
+Automatically evaluates placement eligibility using:
 
 * CGPA
-* Active Backlogs
-* Required Skills
-* Company Criteria
+* Backlogs
+* Skills
+* Company Requirements
 
-### Result Categories
+### Results
 
 * Eligible
 * Conditionally Eligible
@@ -266,45 +233,45 @@ Automatically evaluates eligibility based on:
 
 ---
 
-## 🖼️ Screenshots
+# 🖼️ Screenshots
 
-### Dashboard
+## Dashboard
 
 ![Dashboard](screenshots/dashboard.png)
 
-### Analytics Dashboard
+## Analytics Dashboard
 
 ![Analytics](screenshots/analytics.png)
 
-### AI Placement Profile
+## AI Placement Profile
 
 ![Profile](screenshots/profile.png)
 
-### Job Recommendations
+## Job Recommendations
 
 ![Jobs](screenshots/jobs.png)
 
-### Internship Recommendations
+## Internship Recommendations
 
 ![Internships](screenshots/internships.png)
 
-### Company Intelligence
+## Company Intelligence
 
 ![Company Intelligence](screenshots/company-intel.png)
 
-### Skill Gap Analysis
+## Skill Gap Analysis
 
 ![Skill Gap Analysis](screenshots/skill-gap.png)
 
-### Career AI Agent
+## Career AI Agent
 
 ![Career AI Agent](screenshots/ai-agent.png)
 
-### Job Match Engine
+## Job Match Engine
 
 ![Job Match](screenshots/job-match.png)
 
-### Eligibility Checker
+## Eligibility Checker
 
 ![Eligibility Checker](screenshots/eligibility.png)
 
@@ -313,18 +280,18 @@ Automatically evaluates eligibility based on:
 # 🏗️ System Architecture
 
 ```text
-Browser (EJS Views)
-        |
+Client (EJS Views)
+        │
         ▼
 Express Routes
-        |
+        │
         ▼
 Controllers
-        |
+        │
         ▼
 Services Layer
-        |
-        ├── Resume Analysis Engine
+        │
+        ├── Resume Analyzer
         ├── ATS Scoring Engine
         ├── Job Recommendation Engine
         ├── Internship Recommendation Engine
@@ -332,7 +299,7 @@ Services Layer
         ├── Company Intelligence Engine
         ├── Eligibility Engine
         └── Gemini AI Service
-        |
+        │
         ▼
 MongoDB Database
 ```
@@ -352,21 +319,15 @@ MongoDB Database
 * SCSS
 * Chart.js
 
----
-
 ## Backend
 
 * Node.js
 * Express.js
 
----
-
 ## Database
 
 * MongoDB
 * Mongoose
-
----
 
 ## Authentication
 
@@ -374,17 +335,13 @@ MongoDB Database
 * Session Authentication
 * Google OAuth
 
----
-
-## AI & Analytics
+## AI Integration
 
 * Google Gemini AI
 * Resume Parsing
 * ATS Scoring
 * Skill Extraction
-* Job Recommendation Engine
-* Internship Recommendation Engine
-* Career Guidance Engine
+* Recommendation Systems
 
 ---
 
@@ -425,13 +382,8 @@ PlaceAI
 
 ```bash
 git clone https://github.com/shivpalrathod/PlaceAI---AI-powered-Placement-Intelligence-Platform.git
-```
-
-```bash
 cd PlaceAI---AI-powered-Placement-Intelligence-Platform
 ```
-
----
 
 ## Install Dependencies
 
@@ -439,15 +391,12 @@ cd PlaceAI---AI-powered-Placement-Intelligence-Platform
 npm install
 ```
 
----
-
 ## Configure Environment Variables
 
-Create a `.env` file.
+Create a `.env` file:
 
 ```env
 ENVIRONMENT=development
-
 DEPLOYMENT=local
 
 DEVELOPMENT_DB=mongodb://127.0.0.1:27017/placement_cell
@@ -456,31 +405,19 @@ DEVELOPMENT_SESSION_COOKIE_KEY=your_secret_key
 
 DEVELOPMENT_WEBSITE_LINK=http://localhost:8000
 
-GOOGLE_CLIENT_ID=your_google_client_id
-
-GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CLIENT_ID=your_client_id
+GOOGLE_CLIENT_SECRET=your_client_secret
 
 GEMINI_API_KEY=your_gemini_api_key
-
 GEMINI_MODEL=gemini-1.5-flash
 
 PORT=8000
 ```
 
----
-
 ## Run Application
-
-Development Mode
 
 ```bash
 npm run dev_start
-```
-
-Production Mode
-
-```bash
-npm start
 ```
 
 Visit:
@@ -491,43 +428,26 @@ http://localhost:8000
 
 ---
 
-# 🚀 AI Modules
-
-| Module               | Route            |
-| -------------------- | ---------------- |
-| Resume Analyzer      | /ai/resume       |
-| AI Jobs              | /ai/jobs         |
-| AI Internships       | /ai/internships  |
-| Career AI Agent      | /ai/career-agent |
-| Skill Gap Analysis   | /ai/skill-gap    |
-| Company Intelligence | /ai/companies    |
-| Job Match Engine     | /ai/job-match    |
-| Eligibility Checker  | /ai/eligibility  |
-| Analytics Dashboard  | /ai/analytics    |
-
----
-
 # 🔒 Security Features
 
 * Session-Based Authentication
-* Passport Authentication
 * Google OAuth Login
-* File Upload Validation
-* MongoDB Data Validation
 * Protected Routes
+* File Upload Validation
 * Secure Environment Variables
+* MongoDB Validation
 
 ---
 
 # 🚀 Future Enhancements
 
 * AI Mock Interviews
-* Voice-Based Interview Assistant
+* Voice Interview Assistant
 * Resume Builder
-* Student Portal
+* Student Self-Service Portal
 * Real-Time Job APIs
-* WhatsApp Notifications
 * Email Notifications
+* WhatsApp Notifications
 * Docker Deployment
 * Kubernetes Deployment
 * Mobile Application
@@ -536,7 +456,7 @@ http://localhost:8000
 
 # 👨‍💻 Developer
 
-## Shivpal Rathod
+### Shivpal Rathod
 
 B.Tech – Computer Science & Engineering
 
@@ -560,7 +480,7 @@ If you found this project useful:
 
 ---
 
-# 📄 License
+## 📜 License
 
 This project is developed for educational, placement management, and career development purposes.
 
