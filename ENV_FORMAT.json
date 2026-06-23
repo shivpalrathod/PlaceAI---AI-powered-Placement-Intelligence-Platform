@@ -1,0 +1,27 @@
+{
+	"ENVIRONMENT": "development",
+	"DEPLOYMENT": "local",
+
+	"DEVELOPMENT_ASSET_PATH": "./assets",
+	"ASSET_PATH": "./public/assets",
+
+	"GOOGLE_CLIENT_ID": "configured google client id",
+	"GOOGLE_CLIENT_SECRET": "configured google client secret",
+	"DEVELOPMENT_GOOGLE_CALLBACK_URL": "configured google client callback url",
+	"GOOGLE_CALLBACK_URL": "configured google client callback url",
+
+	"DEVELOPMENT_SESSION_COOKIE_KEY": "your secret key",
+	"SESSION_COOKIE_KEY": "your secret key",
+
+	"DB_NAME": "DB name",
+	"DEVELOPMENT_DB": "development DB URI",
+	"DB": "production DB URI",
+
+	"DEVELOPMENT_WEBSITE_LINK": "development site link",
+	"WEBSITE_LINK": "production site link"
+	,
+	"GEMINI_API_KEY": "Google Gemini API key (optional; local deterministic analysis is used when omitted)",
+	"GEMINI_MODEL": "gemini-1.5-flash",
+	"MONGODB_URI": "optional standard MongoDB URI alias",
+	"SESSION_SECRET": "optional standard session secret alias"
+}

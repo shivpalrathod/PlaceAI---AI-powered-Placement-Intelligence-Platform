@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="AI-Powered Placement Intelligence Platform — Resume Analysis, Job Matching, Career Guidance" />
+		<title><%= title %> | PlaceAI</title>
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+		<!-- Font Awesome 6 -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<!-- NotyJS Styling -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" />
+		<!-- Tailwind CDN -->
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script>
+			tailwind.config = {
+				darkMode: 'class',
+				theme: {
+					extend: {
+						fontFamily: { sans: ['Inter', 'sans-serif'] },
+						colors: {
+							brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#1e1b4b' },
+						},
+					},
+				},
+			};
+		</script>
+		<!-- Bootstrap Styling (kept for existing accordion/modal JS) -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+		<!-- Favicon -->
+		<link rel="shortcut icon" href="<%= assetPath('images/favicon.png') %>" type="image/x-icon" />
+		<!-- Main CSS -->
+		<link rel="stylesheet" href="<%= assetPath('css/layout.css') %>" />
+		<!-- AI Platform CSS -->
+		<link rel="stylesheet" id="ai-platform-css" href="<%= assetPath('css/ai-platform.css') %>" />
+		<%- style %>
+		<!-- Scripts top -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script defer src="<%= assetPath('js/layout.js') %>"></script>
+		<%- script %>
+	</head>
+	<body class="font-sans">
+		<!-- Body -->
+		<main>
+			<!-- Header -->
+			<%- include('_header.ejs'); %>
+			<!-- Body -->
+			<div class="page-content">
+				<%- body %>
+			</div>
+		</main>
+		<!-- Notifications -->
+		<%- include('_noty.ejs'); %>
+		<!-- Templates -->
+		<%- include('templates.ejs'); %>
+	</body>
+</html>
+

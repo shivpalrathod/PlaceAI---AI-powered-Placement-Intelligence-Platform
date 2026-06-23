@@ -1,0 +1,145 @@
+<div class="ai-section" style="max-width:1000px;">
+  <div style="margin-bottom:1.5rem;">
+    <a href="/ai/companies" style="color:var(--text-muted); text-decoration:none; font-size:0.875rem;">
+      ← Back to Companies
+    </a>
+  </div>
+
+  <!-- Company Header -->
+  <div class="ai-card animate-fade-up" style="margin-bottom:1.5rem;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+      <div style="display:flex; align-items:center; gap:1.25rem;">
+        <div class="company-logo-placeholder" style="width:70px; height:70px; font-size:1.75rem; border-radius:16px; background: hsl(<%= (company.name.charCodeAt(0) * 25) % 360 %>, 60%, 40%);">
+          <%= company.name.charAt(0) %>
+        </div>
+        <div>
+          <h1 style="font-size:1.75rem; font-weight:900; letter-spacing:-0.03em; margin:0;"><%= company.name %></h1>
+          <div style="color:var(--text-secondary); font-size:0.9rem;"><%= company.domain %> · <%= company.companyType %></div>
+          <% if (company.website) { %>
+          <a href="<%= company.website %>" target="_blank" style="color:#a5b4fc; font-size:0.85rem; text-decoration:none;">
+            <i class="fa-solid fa-globe"></i> Official Website
+          </a>
+          <% } %>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem;">
+        <span class="difficulty-badge <%= company.difficulty %>"><%= company.difficulty %> Difficulty</span>
+        <% if (hasAnalysis && matchResult.matchPercent > 0) { %>
+        <span class="match-badge <%= matchResult.matchPercent >= 70 ? 'high' : matchResult.matchPercent >= 40 ? 'mid' : 'low' %>" style="font-size:1rem; padding:0.4rem 1rem;">
+          <i class="fa-solid fa-bullseye"></i> <%= matchResult.matchPercent %>% Match
+        </span>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+    <!-- Package & Eligibility -->
+    <div class="ai-card animate-fade-up delay-1">
+      <h3 class="chart-title"><i class="fa-solid fa-indian-rupee-sign"></i> Package & Eligibility</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div>
+          <div style="font-size:0.78rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Package</div>
+          <div style="font-size:1.5rem; font-weight:800; color:#a5b4fc;">💰 <%= company.package || 'N/A' %></div>
+        </div>
+        <div>
+          <div style="font-size:0.78rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Min. CGPA</div>
+          <div style="font-size:1.5rem; font-weight:800; color:#6ee7b7;"><%= company.minimumCgpa || 0 %></div>
+        </div>
+        <div>
+          <div style="font-size:0.78rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Backlogs Allowed</div>
+          <div style="font-size:1.5rem; font-weight:800; color:#fde68a;"><%= company.allowedBacklogs || 0 %></div>
+        </div>
+        <div>
+          <div style="font-size:0.78rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Type</div>
+          <div style="font-size:1rem; font-weight:700; color:var(--text-primary)"><%= company.companyType %></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interview Process -->
+    <div class="ai-card animate-fade-up delay-2">
+      <h3 class="chart-title"><i class="fa-solid fa-route"></i> Interview Rounds</h3>
+      <div style="display:flex; flex-direction:column; gap:0.5rem;">
+        <% (company.interviewRounds || []).forEach(function(round, i) { %>
+        <div style="display:flex; align-items:center; gap:0.75rem; padding:0.6rem; background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.15); border-radius:10px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:var(--gradient-primary); display:grid; place-items:center; font-size:0.75rem; font-weight:700; flex-shrink:0; color:white;">
+            <%= i + 1 %>
+          </div>
+          <span style="font-size:0.875rem; font-weight:600; color:var(--text-primary);"><%= round %></span>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interview Process Details -->
+  <div class="ai-card animate-fade-up delay-3" style="margin-bottom:1.5rem;">
+    <h3 class="chart-title"><i class="fa-solid fa-clipboard-list"></i> Interview Process</h3>
+    <p style="color:var(--text-secondary); line-height:1.7;"><%= company.interviewProcess %></p>
+  </div>
+
+  <!-- Skills -->
+  <% if (company.requiredSkills && company.requiredSkills.length > 0) { %>
+  <div class="ai-card animate-fade-up delay-4" style="margin-bottom:1.5rem;">
+    <h3 class="chart-title"><i class="fa-solid fa-code"></i> Required Skills</h3>
+    <div>
+      <% company.requiredSkills.forEach(function(skill) {
+           const has = (studentSkills || []).map(s=>s.toLowerCase()).includes(skill.toLowerCase());
+      %>
+      <span class="skill-tag <%= has ? 'skill-tag-success' : 'skill-tag-danger' %>" style="margin:0.25rem;">
+        <%= has ? '✓' : '✗' %> <%= skill %>
+      </span>
+      <% }); %>
+    </div>
+    <% if (hasAnalysis) { %>
+    <div style="margin-top:1rem; display:flex; gap:1rem; font-size:0.85rem; color:var(--text-secondary);">
+      <span style="color:#6ee7b7;">✓ Green = You have it</span>
+      <span style="color:#fca5a5;">✗ Red = Need to learn</span>
+    </div>
+    <% } %>
+  </div>
+  <% } %>
+
+  <!-- Match Analysis -->
+  <% if (hasAnalysis) { %>
+  <div class="ai-card animate-fade-up" style="margin-bottom:1.5rem;">
+    <h3 class="chart-title"><i class="fa-solid fa-bullseye"></i> Your Match Analysis</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+      <div>
+        <h4 style="font-size:0.9rem; font-weight:700; color:#6ee7b7; margin-bottom:0.75rem;">✓ Matched Skills</h4>
+        <% if (matchResult.matched.length > 0) { %>
+        <% matchResult.matched.forEach(function(s) { %>
+        <span class="skill-tag skill-tag-success" style="margin:0.2rem;"><%= s %></span>
+        <% }); %>
+        <% } else { %>
+        <p style="color:var(--text-muted); font-size:0.875rem;">No required skills matched yet.</p>
+        <% } %>
+      </div>
+      <div>
+        <h4 style="font-size:0.9rem; font-weight:700; color:#fca5a5; margin-bottom:0.75rem;">✗ Missing Skills</h4>
+        <% if (matchResult.missing.length > 0) { %>
+        <% matchResult.missing.forEach(function(s) { %>
+        <span class="skill-tag skill-tag-danger" style="margin:0.2rem;"><%= s %></span>
+        <% }); %>
+        <% } else { %>
+        <p style="color:#6ee7b7; font-size:0.875rem;">🎉 You have all required skills!</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- Actions -->
+  <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+    <a href="/ai/skill-gap" class="apply-btn" style="background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.3); color:#a5b4fc; box-shadow:none;">
+      <i class="fa-solid fa-chart-bar"></i> View Skill Gap
+    </a>
+    <a href="/ai/jobs" class="apply-btn">
+      <i class="fa-solid fa-briefcase"></i> View Matched Jobs
+    </a>
+    <a href="/ai/career-agent" class="apply-btn" style="background:rgba(139,92,246,0.15); border:1px solid rgba(139,92,246,0.3); color:#c4b5fd; box-shadow:none;">
+      <i class="fa-solid fa-robot"></i> Ask AI Agent
+    </a>
+  </div>
+</div>

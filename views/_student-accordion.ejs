@@ -1,0 +1,168 @@
+<!-- Student Accordion Item -->
+<div class="student-accordion-item accordion-item accordion-item-<%= student._id %>" style="background: #1e293b; border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 12px; margin-bottom: 1rem; overflow: visible;">
+	<h2 class="accordion-header" id="student-heading-<%= student._id %>">
+		<!-- Accordion Button -->
+		<button
+			class="accordion-button student-button d-flex align-items-center justify-content-between"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target="#student-<%= student._id %>"
+			aria-expanded="false"
+			aria-controls="student-<%= student._id %>"
+			style="background: #1e293b; color: #f8fafc; font-weight: 700; padding: 1.25rem; border: none; box-shadow: none;"
+		>
+			<div class="d-flex align-items-center gap-3">
+				<img src="<%= student.avatar || '/images/empty-avatar.png' %>" alt="<%= student.name %>" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #8b5cf6;" />
+				<div>
+					<span style="font-size: 1.1rem; color: #f8fafc;"><%= student.name %></span>
+					<span style="font-size: 1.2rem; margin-left: 0.25rem;"><%= student.gender === "male" ? "👦" : "👧" %></span>
+				</div>
+			</div>
+			<div class="d-flex align-items-center gap-3" style="margin-right: 1.5rem;">
+				<% const hasResume = !!student.resumePath; %>
+				<span class="badge" style="background: <%= hasResume ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)' %>; color: <%= hasResume ? '#34d399' : '#f87171' %>; border: 1px solid <%= hasResume ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)' %>;">
+					<%= hasResume ? 'Resume Uploaded' : 'Upload Resume' %>
+				</span>
+			</div>
+		</button>
+	</h2>
+	<div
+		id="student-<%= student._id %>"
+		class="accordion-collapse collapse"
+		aria-labelledby="student-heading-<%= student._id %>"
+		style="background: #1e293b; border-top: 1px solid rgba(255, 255, 255, 0.05); overflow: visible;"
+	>
+		<!-- Accordion Body -->
+		<div class="accordion-body" style="padding: 1.5rem; color: #f8fafc; overflow: visible;">
+			
+			<div class="row g-4">
+				
+				<!-- Left Side: Profile Image, Name, CGPA, ATS Score -->
+				<div class="col-md-4 text-center d-flex flex-column align-items-center" style="border-right: 1px solid rgba(255, 255, 255, 0.05); padding-right: 1.5rem;">
+					<!-- Profile Image -->
+					<img src="<%= student.avatar || '/images/empty-avatar.png' %>" alt="<%= student.name %>" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #8b5cf6; margin-bottom: 1rem;" />
+					
+					<!-- Name -->
+					<h4 style="font-weight: 700; color: #f8fafc; margin-bottom: 0.5rem;"><%= student.name %></h4>
+					
+					<!-- CGPA -->
+					<p style="margin-bottom: 0.4rem; font-size: 0.95rem; color: #94a3b8;">
+						<strong style="color: #f8fafc;">CGPA:</strong> <%= student.cgpa || 'N/A' %>
+					</p>
+					
+					<!-- ATS Score -->
+					<p style="margin-bottom: 0.4rem; font-size: 0.95rem; color: #94a3b8;">
+						<strong style="color: #f8fafc;">ATS Score:</strong> 
+						<% const ats = student.atsScore || (student.analysis ? student.analysis.atsScore : 0); %>
+						<span class="badge" style="background: <%= ats ? 'rgba(139, 92, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)' %>; color: <%= ats ? '#c4b5fd' : '#94a3b8' %>;">
+							<%= ats || 'Not Analyzed' %>
+						</span>
+					</p>
+
+					<!-- Additional Metadata (Email, Branch, Grad Year, Match Counts) -->
+					<div class="w-100 text-start mt-3 p-3" style="background: rgba(15, 23, 42, 0.4); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.85rem; color: #94a3b8;">
+						<div style="margin-bottom: 0.4rem;"><strong style="color: #f8fafc;">Email:</strong> <span style="word-break: break-all;"><%= student.email || student.name.toLowerCase().replace(/\s+/g, '') + "@placeai.com" %></span></div>
+						<div style="margin-bottom: 0.4rem;"><strong style="color: #f8fafc;">Branch:</strong> <span><%= student.branch || (student.batch ? student.batch.name : "Computer Science") %></span></div>
+						<div style="margin-bottom: 0.4rem;"><strong style="color: #f8fafc;">Grad Year:</strong> <span><%= student.graduationYear || "2026" %></span></div>
+						<div style="margin-bottom: 0.4rem;"><strong style="color: #f8fafc;">Jobs Matched:</strong> <span style="color: #a78bfa; font-weight: 600;"><%= student.recommendedJobsCount || 0 %> matches</span></div>
+						<div style="margin-bottom: 0;"><strong style="color: #f8fafc;">Internships:</strong> <span style="color: #a78bfa; font-weight: 600;"><%= student.recommendedInternshipsCount || 0 %> matches</span></div>
+					</div>
+				</div>
+				
+				<!-- Right Side: Skills Tags, Resume Summary, Readiness Meter, Quick Actions -->
+				<div class="col-md-8 d-flex flex-column justify-content-between">
+					
+					<!-- Skills Tags -->
+					<div style="margin-bottom: 1.25rem;">
+						<h5 style="color: #a78bfa; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Extracted Skills</h5>
+						<div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
+							<% 
+								let skList = student.skills;
+								if ((!skList || skList.length === 0) && student.analysis) {
+									skList = student.analysis.technicalSkills;
+								}
+							%>
+							<% if (skList && skList.length > 0) { %>
+								<% skList.forEach(function(skill) { %>
+									<span class="skill-tag" style="background: rgba(139, 92, 246, 0.1); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 6px; padding: 0.2rem 0.5rem; font-size: 0.8rem;"><%= skill %></span>
+								<% }); %>
+							<% } else { %>
+								<span style="font-style: italic; font-size: 0.85rem; color: #64748b;">No Skills Extracted</span>
+							<% } %>
+						</div>
+					</div>
+					
+					<!-- Resume Summary -->
+					<div style="margin-bottom: 1.25rem;">
+						<h5 style="color: #a78bfa; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Resume Summary</h5>
+						<div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.45; color: #cbd5e1;">
+							<%= student.analysis && student.analysis.improvements && student.analysis.improvements.betterSummary ? student.analysis.improvements.betterSummary : "No summary available. Upload resume to generate." %>
+						</div>
+					</div>
+					
+					<!-- Placement Readiness Meter -->
+					<div style="margin-bottom: 1.25rem;">
+						<div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.35rem;">
+							<span style="color: #94a3b8; font-weight: 600;">Placement Readiness</span>
+							<% const prVal = student.placementReadinessScore || (student.analysis ? student.analysis.placementReadinessScore : 0); %>
+							<strong style="color: #a78bfa;"><%= prVal %>%</strong>
+						</div>
+						<div class="progress" style="height: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 4px; overflow: visible;">
+							<div class="progress-bar" role="progressbar" style="width: <%= prVal %>%; background: #8b5cf6;" aria-valuenow="<%= prVal %>" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+
+					<!-- Quick Actions & Controls -->
+					<div style="display: flex; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 1rem;">
+						<% if (student.resumePath) { %>
+							<a href="<%= student.resumePath %>" target="_blank" class="btn btn-sm btn-outline-light" style="border-color: rgba(255, 255, 255, 0.2);"><i class="fa-solid fa-file-pdf"></i> View Resume</a>
+						<% } else { %>
+							<a href="/ai/resume" class="btn btn-sm btn-outline-warning"><i class="fa-solid fa-upload"></i> Upload Resume</a>
+						<% } %>
+						<a href="/ai/job-match?studentId=<%= student._id %>" class="btn btn-sm btn-outline-primary" style="border-color: rgba(139, 92, 246, 0.5); color: #c4b5fd;"><i class="fa-solid fa-crosshairs"></i> AI Job Match</a>
+						
+						<button class="delete-student-button btn btn-sm btn-danger ms-md-auto" data-id="<%= student._id %>" style="background: #ef4444; border: none; font-weight: 600;">
+							<i class="fa-solid fa-trash"></i> Delete Profile
+						</button>
+					</div>
+					
+				</div>
+				
+			</div>
+
+			<!-- Student registered interviews -->
+			<div class="student-interviews table-responsive" style="margin-top: 1.5rem; background: rgba(15, 23, 42, 0.25); border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); padding: 1rem;">
+				<h6 style="color: #f8fafc; font-weight: 700; margin-bottom: 0.75rem;"><i class="fa-solid fa-calendar-days" style="color: #8b5cf6;"></i> Interviews Schedule</h6>
+				<% if (student.interviews && student.interviews.length > 0) { %>
+					<table class="table table-dark table-hover mb-0" style="background: transparent;">
+						<thead>
+							<tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+								<th scope="col" style="border: none; color: #a78bfa; font-size: 0.85rem;">Company</th>
+								<th scope="col" style="border: none; color: #a78bfa; font-size: 0.85rem;">Date</th>
+								<th scope="col" style="border: none; color: #a78bfa; font-size: 0.85rem;">Result</th>
+							</tr>
+						</thead>
+						<tbody>
+							<% student.interviews.forEach(function(interview) { %>
+								<% if (interview && interview.company) { %>
+									<tr id="<%= interview.company._id %>" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+										<td style="border: none; font-weight: 600; color: #f8fafc;"><%= interview.company.name %></td>
+										<td style="border: none;"><%= new Date(interview.company.date).toLocaleDateString() %></td>
+										<td style="border: none;">
+											<span class="badge" style="text-transform: capitalize; background: <%= interview.result && interview.result.result === 'pass' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)' %>; color: <%= interview.result && interview.result.result === 'pass' ? '#34d399' : '#f87171' %>;">
+												<%= interview.result ? interview.result.result : 'Pending' %>
+											</span>
+										</td>
+									</tr>
+								<% } %>
+							<% }); %>
+						</tbody>
+					</table>
+				<% } else { %>
+					<p style="margin: 0; font-style: italic; font-size: 0.85rem; color: #64748b;">No scheduled interviews.</p>
+				<% } %>
+			</div>
+
+		</div>
+	</div>
+</div>

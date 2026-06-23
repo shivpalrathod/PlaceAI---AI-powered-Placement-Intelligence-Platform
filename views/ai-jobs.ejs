@@ -1,0 +1,162 @@
+<style>
+.ai-section { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+</style>
+
+<div class="ai-section">
+  <!-- Page Header -->
+  <div class="page-header animate-fade-up">
+    <div class="page-header-label"><i class="fa-solid fa-briefcase"></i> AI-Powered</div>
+    <h1 class="page-title">Job Recommendations</h1>
+    <p class="page-subtitle">
+      Jobs matched to your skills using AI. <%= totalJobs %> active listings from top companies.
+      <% if (hasAnalysis) { %> 
+        <span class="skill-tag skill-tag-success" style="margin-left:0.5rem;"><i class="fa-solid fa-check"></i> Personalized for you</span>
+      <% } else { %>
+        <a href="/ai/resume" class="skill-tag skill-tag-warning" style="text-decoration:none;">⚡ Upload resume for personalized matches</a>
+      <% } %>
+    </p>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <input type="text" class="search-input" id="jobSearch" placeholder="🔍 Search jobs, companies, skills..." oninput="filterJobs()">
+    <button class="filter-btn active" onclick="filterByCategory('all', this)">All</button>
+    <button class="filter-btn" onclick="filterByCategory('software', this)">Software</button>
+    <button class="filter-btn" onclick="filterByCategory('data', this)">Data</button>
+    <button class="filter-btn" onclick="filterByCategory('devops', this)">DevOps</button>
+  </div>
+
+  <!-- Stats Row -->
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:1rem; margin-bottom:2rem;">
+    <div class="stat-card animate-fade-up delay-1">
+      <div class="stat-icon" style="background:rgba(99,102,241,0.15); color:#a5b4fc;"><i class="fa-solid fa-briefcase"></i></div>
+      <div class="stat-value"><%= totalJobs %></div>
+      <div class="stat-label">Total Jobs</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-2">
+      <div class="stat-icon" style="background:rgba(16,185,129,0.15); color:#6ee7b7;"><i class="fa-solid fa-star"></i></div>
+      <div class="stat-value"><%= jobs.filter(j => j.matchPercent >= 70).length %></div>
+      <div class="stat-label">High Match (70%+)</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-3">
+      <div class="stat-icon" style="background:rgba(245,158,11,0.15); color:#fde68a;"><i class="fa-solid fa-building"></i></div>
+      <div class="stat-value"><%= Object.keys(companySummary).length %></div>
+      <div class="stat-label">Companies</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-4">
+      <div class="stat-icon" style="background:rgba(6,182,212,0.15); color:#67e8f9;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+      <div class="stat-value"><%= studentSkills.length %></div>
+      <div class="stat-label">Your Skills</div>
+    </div>
+  </div>
+
+  <!-- Jobs Grid -->
+  <div id="jobsGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap:1.25rem;">
+    <% jobs.forEach(function(job, i) { %>
+    <div class="job-card animate-fade-up" style="animation-delay: <%= Math.min(i * 0.05, 0.5) %>s;"
+         data-category="<%= job.category %>" data-search="<%= (job.title + ' ' + job.company + ' ' + (job.skills || []).join(' ')).toLowerCase() %>">
+      
+      <div class="job-card-header">
+        <div style="display:flex; align-items:flex-start; gap:0.75rem; flex:1;">
+          <div class="company-logo-placeholder" style="background: hsl(<%= (job.company.charCodeAt(0) * 20) % 360 %>, 65%, 50%);">
+            <%= job.company.charAt(0) %>
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div class="job-title"><%= job.title %></div>
+            <div class="job-company"><%= job.company %></div>
+            <div class="job-meta">
+              <i class="fa-solid fa-location-dot"></i> <%= job.location %>
+            </div>
+          </div>
+        </div>
+        <div>
+          <% const mp = job.matchPercent; %>
+          <span class="match-badge <%= mp >= 70 ? 'high' : mp >= 40 ? 'mid' : 'low' %>">
+            <%= mp %>% match
+          </span>
+        </div>
+      </div>
+
+      <div class="job-card-body" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <!-- Matched Skills -->
+        <% if (job.matched && job.matched.length > 0) { %>
+        <div>
+          <span style="font-size: 0.75rem; color: #10b981; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 0.25rem;">Matched Skills</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+            <% job.matched.forEach(function(skill) { %>
+              <span class="skill-tag" style="font-size: 0.75rem; padding: 0.15rem 0.4rem; background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); margin: 0;"><%= skill %></span>
+            <% }); %>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Missing Skills -->
+        <% if (job.missing && job.missing.length > 0) { %>
+        <div>
+          <span style="font-size: 0.75rem; color: #f87171; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 0.25rem;">Missing Skills</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+            <% job.missing.forEach(function(skill) { %>
+              <span class="skill-tag" style="font-size: 0.75rem; padding: 0.15rem 0.4rem; background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); margin: 0;"><%= skill %></span>
+            <% }); %>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Why Recommended -->
+        <div style="background: rgba(255,255,255,0.03); padding: 0.6rem 0.75rem; border-radius: 8px; font-size: 0.8rem; border-left: 3px solid #8b5cf6;">
+          <strong style="color: #c4b5fd;">AI Verdict:</strong>
+          <% if (job.matchPercent >= 70) { %>
+            Highly recommended! Strong alignment on <%= job.matched.slice(0, 3).join(', ') %> with <%= job.matchPercent %>% match.
+          <% } else if (job.matchPercent >= 40) { %>
+            Good potential. You have core skills like <%= job.matched.slice(0, 2).join(', ') %>, but learning <%= job.missing.slice(0, 2).join(', ') %> is recommended.
+          <% } else { %>
+            Low matching. Recommend upskilling in <%= job.missing.slice(0, 3).join(', ') %> before applying.
+          <% } %>
+        </div>
+      </div>
+
+      <div class="job-card-footer">
+        <div style="display:flex; flex-direction:column; gap:0.2rem;">
+          <% if (job.package) { %>
+          <span style="font-size:0.875rem; font-weight:700; color:#a5b4fc;">
+            💰 <%= job.package %>
+          </span>
+          <% } %>
+          <span style="font-size:0.78rem; color:var(--text-muted);">
+            <i class="fa-solid fa-clock"></i> <%= job.experience %>
+          </span>
+        </div>
+        <a href="<%= job.applyLink %>" target="_blank" class="apply-btn">
+          Apply Now <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+
+  <% if (jobs.length === 0) { %>
+  <div style="text-align:center; padding:4rem; color:var(--text-muted);">
+    <i class="fa-solid fa-briefcase" style="font-size:3rem; margin-bottom:1rem; opacity:0.3;"></i>
+    <h3>No jobs found</h3>
+    <p>Jobs are loading... Please refresh the page.</p>
+  </div>
+  <% } %>
+</div>
+
+<script>
+function filterJobs() {
+  const query = document.getElementById('jobSearch').value.toLowerCase();
+  document.querySelectorAll('.job-card').forEach(card => {
+    const search = card.dataset.search || '';
+    card.style.display = search.includes(query) ? 'flex' : 'none';
+  });
+}
+
+function filterByCategory(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.job-card').forEach(card => {
+    card.style.display = (cat === 'all' || card.dataset.category === cat) ? 'flex' : 'none';
+  });
+}
+</script>

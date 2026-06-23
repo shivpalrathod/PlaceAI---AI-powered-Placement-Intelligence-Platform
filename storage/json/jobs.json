@@ -1,0 +1,50 @@
+{
+	"1": {
+		"company_name": "Microsoft",
+		"interview_date": "15/07/2026",
+		"job_title": "Python Backend Developer",
+		"location": "Hyderabad, India",
+		"salary": "12-18 LPA",
+		"experience": "0-2 Years",
+		"skills": [
+			"Python",
+			"Django",
+			"MySQL",
+			"REST API"
+		],
+		"logo": "/images/company/microsoft.png",
+		"url": "https://careers.microsoft.com"
+	},
+	"2": {
+		"company_name": "Google",
+		"interview_date": "18/07/2026",
+		"job_title": "Software Engineer Intern",
+		"location": "Bangalore, India",
+		"salary": "15-20 LPA",
+		"experience": "Freshers",
+		"skills": [
+			"Python",
+			"DSA",
+			"Algorithms",
+			"SQL"
+		],
+		"logo": "/images/company/google.png",
+		"url": "https://careers.google.com"
+	},
+	"3": {
+		"company_name": "Amazon",
+		"interview_date": "20/07/2026",
+		"job_title": "SDE Intern",
+		"location": "Hyderabad, India",
+		"salary": "10-16 LPA",
+		"experience": "Freshers",
+		"skills": [
+			"Java",
+			"Python",
+			"DSA",
+			"OOP"
+		],
+		"logo": "/images/company/amazon.png",
+		"url": "https://www.amazon.jobs"
+	}
+}

@@ -1,0 +1,194 @@
+<div class="ai-section">
+  <!-- Header -->
+  <div class="page-header animate-fade-up">
+    <div class="page-header-label"><i class="fa-solid fa-chart-line"></i> Live Intelligence</div>
+    <h1 class="page-title">AI Placement Analytics</h1>
+    <p class="page-subtitle">Real-time insights from resume analysis, job market data, and placement activity.</p>
+  </div>
+
+  <!-- Quick Action Buttons -->
+  <div style="display:flex; gap:0.75rem; margin-bottom:2rem; flex-wrap:wrap;">
+    <a href="/ai/resume" class="apply-btn" style="font-size:0.85rem;"><i class="fa-solid fa-file-text"></i> Resume Analyzer</a>
+    <a href="/ai/jobs" class="apply-btn" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;box-shadow:none;font-size:0.85rem;"><i class="fa-solid fa-briefcase"></i> Job Matches</a>
+    <a href="/ai/career-agent" class="apply-btn" style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3);color:#c4b5fd;box-shadow:none;font-size:0.85rem;"><i class="fa-solid fa-robot"></i> AI Agent</a>
+    <a href="/ai/skill-gap" class="apply-btn" style="background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.3);color:#67e8f9;box-shadow:none;font-size:0.85rem;"><i class="fa-solid fa-chart-bar"></i> Skill Gap</a>
+  </div>
+
+  <!-- Stats Row -->
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:1rem; margin-bottom:2rem;">
+    <div class="stat-card animate-fade-up delay-1">
+      <div class="stat-icon" style="background:rgba(99,102,241,0.15);color:#a5b4fc;"><i class="fa-solid fa-users"></i></div>
+      <div class="stat-value"><%= metrics.students %></div>
+      <div class="stat-label">Total Students</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-2">
+      <div class="stat-icon" style="background:rgba(16,185,129,0.15);color:#6ee7b7;"><i class="fa-solid fa-building"></i></div>
+      <div class="stat-value"><%= metrics.companies %></div>
+      <div class="stat-label">Companies</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-2">
+      <div class="stat-icon" style="background:rgba(6,182,212,0.15);color:#67e8f9;"><i class="fa-solid fa-briefcase"></i></div>
+      <div class="stat-value"><%= metrics.jobs %></div>
+      <div class="stat-label">Active Jobs</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-3">
+      <div class="stat-icon" style="background:rgba(245,158,11,0.15);color:#fde68a;"><i class="fa-solid fa-graduation-cap"></i></div>
+      <div class="stat-value"><%= metrics.internships %></div>
+      <div class="stat-label">Internships</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-3">
+      <div class="stat-icon" style="background:rgba(139,92,246,0.15);color:#c4b5fd;"><i class="fa-solid fa-calendar-check"></i></div>
+      <div class="stat-value"><%= metrics.interviews %></div>
+      <div class="stat-label">Interviews</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-4">
+      <div class="stat-icon" style="background:rgba(239,68,68,0.15);color:#fca5a5;"><i class="fa-solid fa-gauge-high"></i></div>
+      <div class="stat-value" style="color:<%= metrics.averageAts >= 80 ? '#6ee7b7' : metrics.averageAts >= 60 ? '#fde68a' : '#fca5a5' %>">
+        <%= metrics.averageAts %>
+      </div>
+      <div class="stat-label">Avg ATS Score</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-4">
+      <div class="stat-icon" style="background:rgba(16,185,129,0.15);color:#6ee7b7;"><i class="fa-solid fa-trophy"></i></div>
+      <div class="stat-value" style="color:#6ee7b7;"><%= metrics.topAts %></div>
+      <div class="stat-label">Top ATS Score</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-5">
+      <div class="stat-icon" style="background:rgba(99,102,241,0.15);color:#a5b4fc;"><i class="fa-solid fa-file-text"></i></div>
+      <div class="stat-value"><%= metrics.totalAnalyses %></div>
+      <div class="stat-label">Resumes Analyzed</div>
+    </div>
+  </div>
+
+  <!-- Charts Grid -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; margin-bottom:1.25rem;">
+    <div class="chart-card animate-fade-up delay-1">
+      <div class="chart-title"><i class="fa-solid fa-chart-pie"></i> Placement Readiness</div>
+      <canvas id="readinessChart" height="220"></canvas>
+    </div>
+    <div class="chart-card animate-fade-up delay-2">
+      <div class="chart-title"><i class="fa-solid fa-chart-simple"></i> ATS Score Distribution</div>
+      <canvas id="atsDistChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; margin-bottom:1.25rem;">
+    <div class="chart-card animate-fade-up delay-1">
+      <div class="chart-title"><i class="fa-solid fa-code"></i> Top Skills (Resumes)</div>
+      <canvas id="skillsChart" height="220"></canvas>
+    </div>
+    <div class="chart-card animate-fade-up delay-2">
+      <div class="chart-title"><i class="fa-solid fa-building"></i> Required Skills (Companies)</div>
+      <canvas id="demandChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; margin-bottom:1.25rem;">
+    <div class="chart-card animate-fade-up delay-1">
+      <div class="chart-title"><i class="fa-solid fa-calendar-lines"></i> Monthly Hiring Trends</div>
+      <canvas id="monthlyChart" height="220"></canvas>
+    </div>
+    <div class="chart-card animate-fade-up delay-2">
+      <div class="chart-title"><i class="fa-solid fa-building-columns"></i> Company Activity</div>
+      <canvas id="companyChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; margin-bottom:1.25rem;">
+    <div class="chart-card animate-fade-up delay-1">
+      <div class="chart-title"><i class="fa-solid fa-briefcase"></i> Job Categories</div>
+      <canvas id="jobCatChart" height="220"></canvas>
+    </div>
+    <div class="chart-card animate-fade-up delay-2">
+      <div class="chart-title"><i class="fa-solid fa-heart-pulse"></i> Resume Health Overview</div>
+      <canvas id="healthChart" height="220"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+const readinessData = <%- chartData.readiness %>;
+const demandedData  = <%- chartData.demandedSkills %>;
+const topSkillsData = <%- chartData.topSkills %>;
+const atsDistData   = <%- chartData.atsDistribution %>;
+const monthlyData   = <%- chartData.monthlyHiring %>;
+const companyData   = <%- chartData.companyHiring %>;
+const jobCatData    = <%- chartData.jobCategories %>;
+const healthData    = <%- chartData.resumeHealth %>;
+
+const COLORS = ['#6366f1','#8b5cf6','#06b6d4','#10b981','#f59e0b','#ef4444','#ec4899','#14b8a6','#f97316','#84cc16'];
+const chartDefaults = {
+  responsive: true,
+  plugins: {
+    legend: { labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 } } },
+    tooltip: { backgroundColor: 'rgba(15,15,26,0.9)', titleColor: '#f1f5f9', bodyColor: '#94a3b8', borderColor: 'rgba(99,102,241,0.3)', borderWidth: 1 }
+  },
+  scales: {
+    x: { ticks: { color: '#64748b', font: { family: 'Inter', size: 11 } }, grid: { color: 'rgba(99,102,241,0.06)' } },
+    y: { ticks: { color: '#64748b', font: { family: 'Inter', size: 11 } }, grid: { color: 'rgba(99,102,241,0.06)' } }
+  }
+};
+const noAxes = { ...chartDefaults, scales: undefined };
+
+// 1. Readiness
+new Chart(document.getElementById('readinessChart'), {
+  type: 'doughnut',
+  data: { labels: Object.keys(readinessData), datasets: [{ data: Object.values(readinessData), backgroundColor: ['#ef4444','#f59e0b','#10b981'], borderWidth: 0, hoverOffset: 8 }] },
+  options: { ...noAxes, cutout: '65%', plugins: { ...noAxes.plugins, legend: { position: 'bottom', labels: { color:'#94a3b8', padding:15 } } } }
+});
+
+// 2. ATS Distribution
+new Chart(document.getElementById('atsDistChart'), {
+  type: 'bar',
+  data: { labels: Object.keys(atsDistData), datasets: [{ data: Object.values(atsDistData), backgroundColor: COLORS.slice(0,5), borderRadius: 6, borderSkipped: false }] },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } } }
+});
+
+// 3. Top Skills
+new Chart(document.getElementById('skillsChart'), {
+  type: 'bar',
+  data: { labels: topSkillsData.map(x=>x[0]), datasets: [{ data: topSkillsData.map(x=>x[1]), backgroundColor: '#6366f1', borderRadius: 6, borderSkipped: false }] },
+  options: { ...chartDefaults, indexAxis: 'y', plugins: { ...chartDefaults.plugins, legend: { display: false } } }
+});
+
+// 4. Demanded Skills
+new Chart(document.getElementById('demandChart'), {
+  type: 'bar',
+  data: { labels: demandedData.map(x=>x[0]), datasets: [{ data: demandedData.map(x=>x[1]), backgroundColor: '#8b5cf6', borderRadius: 6, borderSkipped: false }] },
+  options: { ...chartDefaults, indexAxis: 'y', plugins: { ...chartDefaults.plugins, legend: { display: false } } }
+});
+
+// 5. Monthly
+new Chart(document.getElementById('monthlyChart'), {
+  type: 'line',
+  data: {
+    labels: Object.keys(monthlyData).length ? Object.keys(monthlyData) : ['Jan','Feb','Mar','Apr','May','Jun'],
+    datasets: [{ data: Object.values(monthlyData).length ? Object.values(monthlyData) : [0,0,0,0,0,0], borderColor:'#06b6d4', backgroundColor:'rgba(6,182,212,0.1)', borderWidth:2, pointRadius:4, pointBackgroundColor:'#06b6d4', fill:true, tension:0.4 }]
+  },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } } }
+});
+
+// 6. Company
+new Chart(document.getElementById('companyChart'), {
+  type: 'bar',
+  data: { labels: companyData.map(x=>x[0]), datasets: [{ data: companyData.map(x=>x[1]), backgroundColor: COLORS, borderRadius: 6, borderSkipped: false }] },
+  options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false } } }
+});
+
+// 7. Job Categories
+new Chart(document.getElementById('jobCatChart'), {
+  type: 'doughnut',
+  data: { labels: jobCatData.map(x=>x[0]), datasets: [{ data: jobCatData.map(x=>x[1]), backgroundColor: COLORS, borderWidth: 0, hoverOffset: 8 }] },
+  options: { ...noAxes, cutout: '55%', plugins: { ...noAxes.plugins, legend: { position: 'bottom', labels: { color:'#94a3b8', padding:12, font:{size:11} } } } }
+});
+
+// 8. Resume Health
+new Chart(document.getElementById('healthChart'), {
+  type: 'radar',
+  data: {
+    labels: Object.keys(healthData),
+    datasets: [{ data: Object.values(healthData), backgroundColor:'rgba(99,102,241,0.15)', borderColor:'#6366f1', borderWidth:2, pointBackgroundColor:'#6366f1', pointRadius:4 }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false }, tooltip: chartDefaults.plugins.tooltip }, scales: { r: { ticks: { color:'#64748b', backdropColor:'transparent', font:{size:10} }, grid: { color:'rgba(99,102,241,0.1)' }, pointLabels: { color:'#94a3b8', font:{size:11} } } } }
+});
+</script>

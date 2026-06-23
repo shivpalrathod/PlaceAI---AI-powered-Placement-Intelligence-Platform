@@ -1,0 +1,89 @@
+<div class="ai-section">
+  <!-- Header -->
+  <div class="page-header animate-fade-up">
+    <div class="page-header-label"><i class="fa-solid fa-building"></i> Intelligence Report</div>
+    <h1 class="page-title">Company Intelligence</h1>
+    <p class="page-subtitle"><%= totalCompanies %> companies analyzed with interview processes, packages, and your match percentage.</p>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <input type="text" class="search-input" id="companySearch" placeholder="🔍 Search companies..." oninput="filterCompanies()">
+    <button class="filter-btn active" onclick="filterByDifficulty('all', this)">All</button>
+    <button class="filter-btn" onclick="filterByDifficulty('Easy', this)" style="color:#6ee7b7; border-color:rgba(16,185,129,0.3);">Easy</button>
+    <button class="filter-btn" onclick="filterByDifficulty('Medium', this)" style="color:#fde68a; border-color:rgba(245,158,11,0.3);">Medium</button>
+    <button class="filter-btn" onclick="filterByDifficulty('Hard', this)" style="color:#fca5a5; border-color:rgba(239,68,68,0.3);">Hard</button>
+  </div>
+
+  <!-- Company Grid -->
+  <div id="companiesGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:1.25rem;">
+    <% companies.forEach(function(company, i) { %>
+    <a href="/ai/companies/<%= encodeURIComponent(company.name) %>" class="company-card animate-fade-up" style="animation-delay: <%= Math.min(i * 0.04, 0.5) %>s; color:var(--text-primary);"
+       data-difficulty="<%= company.difficulty %>"
+       data-search="<%= company.name.toLowerCase() %>">
+
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1rem;">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <div class="company-logo-placeholder" style="background: hsl(<%= (company.name.charCodeAt(0) * 25) % 360 %>, 60%, 40%);">
+            <%= company.name.charAt(0) %>
+          </div>
+          <div>
+            <div style="font-size:1rem; font-weight:700;"><%= company.name %></div>
+            <div style="font-size:0.8rem; color:var(--text-muted);"><%= company.domain %></div>
+          </div>
+        </div>
+        <span class="difficulty-badge <%= company.difficulty %>"><%= company.difficulty %></span>
+      </div>
+
+      <!-- Package & Match -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+        <div>
+          <div style="font-size:1.1rem; font-weight:800; color:#a5b4fc;">💰 <%= company.package || 'N/A' %></div>
+          <div style="font-size:0.78rem; color:var(--text-muted);">Min CGPA: <%= company.minimumCgpa %></div>
+        </div>
+        <% if (hasAnalysis && company.matchPercent > 0) { %>
+        <span class="match-badge <%= company.matchPercent >= 70 ? 'high' : company.matchPercent >= 40 ? 'mid' : 'low' %>">
+          <%= company.matchPercent %>% match
+        </span>
+        <% } %>
+      </div>
+
+      <!-- Interview Rounds -->
+      <div style="margin-bottom:0.75rem;">
+        <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.4rem; font-weight:600;">INTERVIEW ROUNDS</div>
+        <div style="display:flex; flex-wrap:wrap; gap:0.3rem;">
+          <% (company.interviewRounds || []).forEach(function(round) { %>
+          <span class="skill-tag skill-tag-primary" style="font-size:0.72rem; padding:0.2rem 0.5rem;"><%= round %></span>
+          <% }); %>
+        </div>
+      </div>
+
+      <!-- Type Badge -->
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">
+          <%= company.companyType %>
+        </span>
+        <span style="font-size:0.78rem; color:var(--accent-primary);">
+          View Details <i class="fa-solid fa-arrow-right"></i>
+        </span>
+      </div>
+    </a>
+    <% }); %>
+  </div>
+</div>
+
+<script>
+function filterCompanies() {
+  const q = document.getElementById('companySearch').value.toLowerCase();
+  document.querySelectorAll('.company-card').forEach(c => {
+    c.style.display = c.dataset.search.includes(q) ? 'block' : 'none';
+  });
+}
+function filterByDifficulty(diff, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.company-card').forEach(c => {
+    c.style.display = (diff === 'all' || c.dataset.difficulty === diff) ? 'block' : 'none';
+  });
+}
+</script>

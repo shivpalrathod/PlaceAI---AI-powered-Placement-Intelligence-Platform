@@ -1,0 +1,160 @@
+<div class="ai-section" style="max-width: 1100px;">
+  <!-- Page Header -->
+  <div class="page-header animate-fade-up">
+    <div class="page-header-label"><i class="fa-solid fa-robot"></i> AI-Powered</div>
+    <h1 class="page-title">Career AI Agent</h1>
+    <p class="page-subtitle">Your personal AI career counselor. Ask anything about jobs, skills, resume, or career guidance.</p>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 300px 1fr; gap:1.5rem; align-items:start;">
+    <!-- Sidebar -->
+    <div class="animate-fade-up delay-1">
+      <!-- Status Card -->
+      <div class="ai-card" style="margin-bottom:1rem;">
+        <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+          <div style="width:10px; height:10px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></div>
+          <span style="font-size:0.85rem; font-weight:600; color:#6ee7b7;">AI Agent Online</span>
+        </div>
+        <% if (hasResume) { %>
+        <div style="font-size:0.85rem; color:var(--text-secondary);">
+          <p>📄 Resume analyzed for <strong style="color:var(--text-primary);"><%= studentName %></strong></p>
+          <p>🎯 ATS Score: <strong style="color:<%= atsScore >= 80 ? '#6ee7b7' : atsScore >= 60 ? '#fde68a' : '#fca5a5' %>"><%= atsScore %>/100</strong></p>
+          <% if (skills.length > 0) { %>
+          <p>🛠 Skills: <%= skills.slice(0, 3).join(', ') %><%= skills.length > 3 ? ' +' + (skills.length-3) + ' more' : '' %></p>
+          <% } %>
+        </div>
+        <% } else { %>
+        <div style="font-size:0.85rem; color:var(--text-muted);">
+          <p>No resume uploaded yet.</p>
+          <a href="/ai/resume" class="apply-btn" style="display:inline-block; margin-top:0.5rem; font-size:0.8rem;">
+            Upload Resume
+          </a>
+        </div>
+        <% } %>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="ai-card">
+        <h3 style="font-size:0.9rem; font-weight:700; margin-bottom:0.75rem; color:var(--text-secondary);">QUICK LINKS</h3>
+        <div style="display:flex; flex-direction:column; gap:0.5rem;">
+          <a href="/ai/jobs" style="color:var(--text-secondary); font-size:0.85rem; text-decoration:none; display:flex; align-items:center; gap:0.5rem; padding:0.5rem; border-radius:8px; transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.1)'" onmouseout="this.style.background='transparent'">
+            <i class="fa-solid fa-briefcase" style="color:#a5b4fc;"></i> View Matched Jobs
+          </a>
+          <a href="/ai/internships" style="color:var(--text-secondary); font-size:0.85rem; text-decoration:none; display:flex; align-items:center; gap:0.5rem; padding:0.5rem; border-radius:8px; transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.1)'" onmouseout="this.style.background='transparent'">
+            <i class="fa-solid fa-graduation-cap" style="color:#a5b4fc;"></i> Browse Internships
+          </a>
+          <a href="/ai/skill-gap" style="color:var(--text-secondary); font-size:0.85rem; text-decoration:none; display:flex; align-items:center; gap:0.5rem; padding:0.5rem; border-radius:8px; transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.1)'" onmouseout="this.style.background='transparent'">
+            <i class="fa-solid fa-chart-bar" style="color:#a5b4fc;"></i> Skill Gap Analysis
+          </a>
+          <a href="/ai/companies" style="color:var(--text-secondary); font-size:0.85rem; text-decoration:none; display:flex; align-items:center; gap:0.5rem; padding:0.5rem; border-radius:8px; transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.1)'" onmouseout="this.style.background='transparent'">
+            <i class="fa-solid fa-building" style="color:#a5b4fc;"></i> Company Intelligence
+          </a>
+          <a href="/ai/resume" style="color:var(--text-secondary); font-size:0.85rem; text-decoration:none; display:flex; align-items:center; gap:0.5rem; padding:0.5rem; border-radius:8px; transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.1)'" onmouseout="this.style.background='transparent'">
+            <i class="fa-solid fa-file-text" style="color:#a5b4fc;"></i> Analyze Resume
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="ai-card animate-fade-up delay-2" style="padding:0; overflow:hidden;">
+      <div class="chat-container" id="chatContainer">
+        <!-- Messages -->
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-bubble ai">
+            👋 <strong>Hi there!</strong> I'm your AI Career Agent, powered by Gemini AI.<br><br>
+            I have access to your resume data and can help with:<br>
+            • Job and internship recommendations<br>
+            • ATS score improvement<br>
+            • Skill gap analysis<br>
+            • Company research<br>
+            • Interview preparation<br><br>
+            <strong>What can I help you with today?</strong>
+          </div>
+        </div>
+
+        <!-- Quick Prompts -->
+        <div class="quick-prompts" id="quickPrompts">
+          <button class="quick-prompt-btn" onclick="sendQuickPrompt('What jobs match my profile?')">💼 What jobs match my profile?</button>
+          <button class="quick-prompt-btn" onclick="sendQuickPrompt('How can I improve my ATS score?')">📊 Improve ATS score</button>
+          <button class="quick-prompt-btn" onclick="sendQuickPrompt('What skills should I learn next?')">📚 What to learn next?</button>
+          <button class="quick-prompt-btn" onclick="sendQuickPrompt('Which companies am I eligible for?')">🏢 Which companies?</button>
+          <button class="quick-prompt-btn" onclick="sendQuickPrompt('How to prepare for technical interviews?')">🎤 Interview prep</button>
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input-area">
+          <textarea class="chat-input" id="chatInput" placeholder="Ask me anything about your career..." rows="1"
+            onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); sendMessage();}"></textarea>
+          <button class="chat-send-btn" id="sendBtn" onclick="sendMessage()">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function renderMarkdown(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#a5b4fc">$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/•\s/g, '• ')
+    .replace(/\n/g, '<br>');
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const messages = document.getElementById('chatMessages');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  // Hide quick prompts after first message
+  document.getElementById('quickPrompts').style.display = 'none';
+
+  // Add user bubble
+  const userBubble = document.createElement('div');
+  userBubble.className = 'chat-bubble user';
+  userBubble.textContent = msg;
+  messages.appendChild(userBubble);
+  input.value = '';
+  sendBtn.disabled = true;
+
+  // Typing indicator
+  const typingBubble = document.createElement('div');
+  typingBubble.className = 'chat-bubble ai';
+  typingBubble.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  messages.appendChild(typingBubble);
+  messages.scrollTop = messages.scrollHeight;
+
+  try {
+    const res = await fetch('/ai/career-agent/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg }),
+    });
+    const data = await res.json();
+    typingBubble.remove();
+
+    const aiBubble = document.createElement('div');
+    aiBubble.className = 'chat-bubble ai animate-fade';
+    aiBubble.innerHTML = renderMarkdown(data.response || 'Sorry, I could not process that. Please try again.');
+    if (data.source === 'gemini') {
+      aiBubble.innerHTML += '<br><small style="opacity:0.4; font-size:0.7rem;">✨ Gemini AI</small>';
+    }
+    messages.appendChild(aiBubble);
+  } catch(e) {
+    typingBubble.innerHTML = '❌ Connection error. Please try again.';
+  }
+
+  sendBtn.disabled = false;
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function sendQuickPrompt(prompt) {
+  document.getElementById('chatInput').value = prompt;
+  sendMessage();
+}
+</script>

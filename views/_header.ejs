@@ -1,0 +1,111 @@
+<!-- If User is not logged in -->
+<% if (!locals.user) { %>
+<!-- Login page — no nav needed, logo shown in page body -->
+<% } %>
+
+<!-- If User is logged in -->
+<% if (locals.user) { %>
+<nav class="ai-navbar" id="ai-navbar">
+	<!-- Brand -->
+	<a href="/" class="nav-brand">
+		<div class="nav-brand-icon">
+			<i class="fa-solid fa-rocket"></i>
+		</div>
+		<span class="nav-brand-name">PlaceAI</span>
+	</a>
+
+	<!-- Nav Links -->
+	<div class="nav-links-wrapper" id="navLinksDesktop">
+		<a href="/" class="nav-link-item">
+			<i class="fa-solid fa-house"></i> Dashboard
+		</a>
+		<a href="/ai/analytics" class="nav-link-item">
+			<i class="fa-solid fa-chart-line"></i> Analytics
+		</a>
+		<a href="/ai/resume" class="nav-link-item">
+			<i class="fa-solid fa-file-text"></i> Resume AI
+		</a>
+		<a href="/ai/jobs" class="nav-link-item">
+			<i class="fa-solid fa-briefcase"></i> Jobs
+		</a>
+		<a href="/ai/internships" class="nav-link-item">
+			<i class="fa-solid fa-graduation-cap"></i> Internships
+		</a>
+		<a href="/ai/companies" class="nav-link-item">
+			<i class="fa-solid fa-building"></i> Companies
+		</a>
+		<a href="/ai/skill-gap" class="nav-link-item">
+			<i class="fa-solid fa-chart-bar"></i> Skill Gap
+		</a>
+		<a href="/ai/career-agent" class="nav-link-item">
+			<i class="fa-solid fa-robot"></i> AI Agent
+			<span class="nav-badge">AI</span>
+		</a>
+		<a href="/ai/job-match" class="nav-link-item">
+			<i class="fa-solid fa-crosshairs"></i> Job Match
+		</a>
+		<a href="/ai/eligibility" class="nav-link-item">
+			<i class="fa-solid fa-check-circle"></i> Eligibility
+		</a>
+	</div>
+
+	<!-- Actions -->
+	<div class="nav-actions">
+		<a href="/report" class="nav-btn nav-btn-ghost" title="Download Report">
+			<i class="fa-solid fa-download"></i>
+		</a>
+		<a href="/profile/<%= locals.user.id %>" class="nav-btn nav-btn-ghost">
+			<i class="fa-solid fa-user"></i>
+			<span class="d-none d-lg-inline" style="margin-left: 0.35rem;">Profile</span>
+		</a>
+		<a href="/destroy-session" class="nav-btn nav-btn-ghost" title="Logout">
+			<i class="fa-solid fa-right-from-bracket"></i>
+		</a>
+	</div>
+
+	<!-- Mobile Toggle -->
+	<button class="nav-btn nav-btn-ghost d-lg-none" id="mobileMenuToggle" style="font-size: 1.1rem;">
+		<i class="fa-solid fa-bars" id="mobileMenuIcon"></i>
+	</button>
+</nav>
+
+<!-- Mobile Dropdown Menu -->
+<div class="mobile-menu" id="mobileMenu" style="display:none; position:fixed; top:68px; left:0; right:0; z-index:99; background:rgba(15,15,26,0.97); backdrop-filter:blur(20px); border-bottom:1px solid rgba(99,102,241,0.2); padding:1rem;">
+	<div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
+		<a href="/" class="nav-link-item">🏠 Dashboard</a>
+		<a href="/ai/analytics" class="nav-link-item">📊 Analytics</a>
+		<a href="/ai/resume" class="nav-link-item">📄 Resume AI</a>
+		<a href="/ai/jobs" class="nav-link-item">💼 Jobs</a>
+		<a href="/ai/internships" class="nav-link-item">🎓 Internships</a>
+		<a href="/ai/companies" class="nav-link-item">🏢 Companies</a>
+		<a href="/ai/skill-gap" class="nav-link-item">📈 Skill Gap</a>
+		<a href="/ai/career-agent" class="nav-link-item">🤖 AI Agent</a>
+		<a href="/profile/<%= locals.user.id %>" class="nav-link-item">👤 Profile</a>
+		<a href="/destroy-session" class="nav-link-item">🚪 Logout</a>
+	</div>
+</div>
+
+<script>
+	const mobileToggle = document.getElementById('mobileMenuToggle');
+	const mobileMenu = document.getElementById('mobileMenu');
+	const mobileIcon = document.getElementById('mobileMenuIcon');
+	if (mobileToggle) {
+		mobileToggle.addEventListener('click', () => {
+			const isOpen = mobileMenu.style.display === 'block';
+			mobileMenu.style.display = isOpen ? 'none' : 'block';
+			mobileIcon.className = isOpen ? 'fa-solid fa-bars' : 'fa-solid fa-xmark';
+		});
+	}
+	// Highlight active nav link
+	const currentPath = window.location.pathname;
+	document.querySelectorAll('.nav-link-item').forEach(link => {
+		if (link.getAttribute('href') === currentPath || (currentPath.startsWith(link.getAttribute('href')) && link.getAttribute('href') !== '/')) {
+			link.classList.add('active');
+		}
+	});
+</script>
+
+<!-- Spacer so content doesn't hide behind fixed nav -->
+<div style="height: 68px;"></div>
+<% } %>
+

@@ -1,0 +1,122 @@
+<div class="ai-section">
+  <!-- Page Header -->
+  <div class="page-header animate-fade-up">
+    <div class="page-header-label"><i class="fa-solid fa-graduation-cap"></i> AI-Powered</div>
+    <h1 class="page-title">Internship Recommendations</h1>
+    <p class="page-subtitle">
+      <%= totalInternships %> internships matched to your skills from top companies.
+      <% if (hasAnalysis) { %>
+        <span class="skill-tag skill-tag-success"><i class="fa-solid fa-check"></i> Personalized</span>
+      <% } else { %>
+        <a href="/ai/resume" class="skill-tag skill-tag-warning" style="text-decoration:none;">⚡ Upload resume for best matches</a>
+      <% } %>
+    </p>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <input type="text" class="search-input" id="internSearch" placeholder="🔍 Search internships..." oninput="filterInterns()">
+    <button class="filter-btn active" onclick="filterByCategory('all', this)">All</button>
+    <button class="filter-btn" onclick="filterByCategory('software', this)">Software</button>
+    <button class="filter-btn" onclick="filterByCategory('data', this)">Data / AI</button>
+    <button class="filter-btn" onclick="filterByRemote(this)">Remote Only</button>
+  </div>
+
+  <!-- Grid -->
+  <div id="internsGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap:1.25rem;">
+    <% internships.forEach(function(intern, i) { %>
+    <div class="job-card animate-fade-up" style="animation-delay: <%= Math.min(i * 0.05, 0.5) %>s;"
+         data-category="<%= intern.category %>" data-remote="<%= intern.isRemote %>"
+         data-search="<%= (intern.title + ' ' + intern.company + ' ' + (intern.skills||[]).join(' ')).toLowerCase() %>">
+
+      <div class="job-card-header">
+        <div style="display:flex; align-items:flex-start; gap:0.75rem; flex:1;">
+          <div class="company-logo-placeholder" style="background: hsl(<%= (intern.company.charCodeAt(0) * 30) % 360 %>, 60%, 45%);">
+            <%= intern.company.charAt(0) %>
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div class="job-title"><%= intern.title %></div>
+            <div class="job-company"><%= intern.company %></div>
+            <div class="job-meta">
+              <i class="fa-solid fa-location-dot"></i> <%= intern.location %>
+              <% if (intern.isRemote) { %><span class="skill-tag skill-tag-success" style="padding:0.15rem 0.5rem; font-size:0.7rem; margin-left:0.3rem;">Remote</span><% } %>
+            </div>
+          </div>
+        </div>
+        <span class="match-badge <%= intern.matchPercent >= 70 ? 'high' : intern.matchPercent >= 40 ? 'mid' : 'low' %>">
+          <%= intern.matchPercent %>%
+        </span>
+      </div>
+
+      <div class="job-card-body" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display:flex; gap:1rem; font-size:0.85rem; color:#94a3b8;">
+          <span><i class="fa-solid fa-calendar" style="color: #8b5cf6;"></i> Duration: <strong><%= intern.duration %></strong></span>
+          <span><i class="fa-solid fa-indian-rupee-sign" style="color: #8b5cf6;"></i> Stipend: <strong><%= intern.stipend %></strong></span>
+        </div>
+
+        <!-- Matched Skills -->
+        <% if (intern.matched && intern.matched.length > 0) { %>
+        <div>
+          <span style="font-size: 0.75rem; color: #10b981; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 0.25rem;">Matched Skills</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+            <% intern.matched.forEach(function(skill) { %>
+              <span class="skill-tag" style="font-size: 0.75rem; padding: 0.15rem 0.4rem; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); margin: 0;"><%= skill %></span>
+            <% }); %>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Missing Skills -->
+        <% if (intern.missing && intern.missing.length > 0) { %>
+        <div>
+          <span style="font-size: 0.75rem; color: #f87171; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 0.25rem;">Missing Skills</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+            <% intern.missing.forEach(function(skill) { %>
+              <span class="skill-tag" style="font-size: 0.75rem; padding: 0.15rem 0.4rem; background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); margin: 0;"><%= skill %></span>
+            <% }); %>
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+      <div class="job-card-footer">
+        <div>
+          <div style="font-size:0.9rem; font-weight:700; color:#a5b4fc;"><%= intern.stipend %></div>
+          <div style="font-size:0.78rem; color:var(--text-muted);"><%= intern.duration %></div>
+        </div>
+        <a href="<%= intern.applyLink %>" target="_blank" class="apply-btn">Apply <i class="fa-solid fa-external-link"></i></a>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+</div>
+
+<script>
+let remoteOnly = false;
+function filterInterns() {
+  const query = document.getElementById('internSearch').value.toLowerCase();
+  document.querySelectorAll('.job-card').forEach(card => {
+    const search = card.dataset.search || '';
+    const remote = card.dataset.remote === 'true';
+    const matchSearch = search.includes(query);
+    const matchRemote = !remoteOnly || remote;
+    card.style.display = matchSearch && matchRemote ? 'flex' : 'none';
+  });
+}
+function filterByCategory(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  remoteOnly = false;
+  document.querySelectorAll('.job-card').forEach(card => {
+    card.style.display = (cat === 'all' || card.dataset.category === cat) ? 'flex' : 'none';
+  });
+}
+function filterByRemote(btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  remoteOnly = true;
+  document.querySelectorAll('.job-card').forEach(card => {
+    card.style.display = card.dataset.remote === 'true' ? 'flex' : 'none';
+  });
+}
+</script>

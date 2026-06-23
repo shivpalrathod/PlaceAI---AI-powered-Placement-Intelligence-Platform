@@ -1,0 +1,196 @@
+<!-- Interview Accordion Item -->
+<%
+  let matchPercent = 0;
+  let matchedSkills = [];
+  let reqSkillsList = company.requiredSkills || [];
+  
+  if (locals.user && locals.user.skills && locals.user.skills.length > 0 && reqSkillsList.length > 0) {
+    const userSkillsLower = locals.user.skills.map(s => s.trim().toLowerCase());
+    const requiredSkillsLower = reqSkillsList.map(s => s.trim().toLowerCase());
+    requiredSkillsLower.forEach(reqSkill => {
+      if (userSkillsLower.some(userSkill => userSkill.includes(reqSkill) || reqSkill.includes(userSkill))) {
+        matchedSkills.push(reqSkill);
+      }
+    });
+    matchPercent = requiredSkillsLower.length > 0 ? Math.round((matchedSkills.length / requiredSkillsLower.length) * 100) : 0;
+  } else if (reqSkillsList.length > 0) {
+    matchPercent = 0;
+  } else {
+    matchPercent = 100;
+  }
+
+  // Calculate Eligibility Status
+  let isEligible = true;
+  let eligibilityReasons = [];
+  if (locals.user) {
+    if (typeof locals.user.cgpa === 'number' && typeof company.minimumCgpa === 'number' && locals.user.cgpa < company.minimumCgpa) {
+      isEligible = false;
+      eligibilityReasons.push(`CGPA (${locals.user.cgpa}) is below required (${company.minimumCgpa})`);
+    }
+    if (typeof locals.user.backlogs === 'number' && typeof company.allowedBacklogs === 'number' && locals.user.backlogs > company.allowedBacklogs) {
+      isEligible = false;
+      eligibilityReasons.push(`Backlogs (${locals.user.backlogs}) exceed allowed (${company.allowedBacklogs})`);
+    }
+  }
+
+  // Calculate Interview Status
+  const isUpcoming = new Date(company.date) > new Date();
+  const interviewStatus = isUpcoming ? "Upcoming" : "Completed";
+
+  // Calculate Application/Registration Status of the logged-in user
+  let appStatus = "Not Registered";
+  if (locals.user && company.interviews && company.interviews.length > 0) {
+    const userSlot = company.interviews.find(iv => iv.student && iv.student._id.toString() === locals.user.id.toString());
+    if (userSlot) {
+      appStatus = userSlot.result ? userSlot.result.result : "Registered";
+    }
+  }
+%>
+<div
+	class="interview-accordion-item accordion-item accordion-item-<%= company._id %>"
+	id="accordion-item-<%= company._id %>"
+	style="background: #1e293b; border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 12px; margin-bottom: 1rem; overflow: visible;"
+>
+	<h2 class="accordion-header" id="interview-heading-<%= company._id %>">
+		<!-- Accordion Button -->
+		<button
+			class="accordion-button interview-button d-flex align-items-center justify-content-between"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target="#interview-<%= company._id %>"
+			aria-expanded="false"
+			aria-controls="interview-<%= company._id %>"
+			style="background: #1e293b; color: #f8fafc; font-weight: 700; padding: 1.25rem; border: none; box-shadow: none;"
+		>
+			<div class="d-flex align-items-center gap-3">
+				<span style="font-size: 1.1rem; color: #f8fafc;"><%= company.name %> 🚀</span>
+				<span class="badge" style="background: <%= company.difficulty === 'Easy' ? 'rgba(16, 185, 129, 0.15)' : company.difficulty === 'Hard' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)' %>; color: <%= company.difficulty === 'Easy' ? '#34d399' : company.difficulty === 'Hard' ? '#f87171' : '#fbbf24' %>; border: 1px solid <%= company.difficulty === 'Easy' ? 'rgba(16, 185, 129, 0.3)' : company.difficulty === 'Hard' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(245, 158, 11, 0.3)' %>;">
+					<%= company.difficulty || 'Medium' %>
+				</span>
+			</div>
+			<div class="d-flex align-items-center gap-3" style="margin-right: 1.5rem;">
+				<span class="badge" style="background: rgba(139, 92, 246, 0.15); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3); font-weight: 700;">
+					Match: <%= matchPercent %>%
+				</span>
+				<span style="font-size: 0.85rem; color: #94a3b8;"><%= new Date(company.date).toLocaleDateString("en-GB", { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+			</div>
+		</button>
+	</h2>
+	<div
+		id="interview-<%= company._id %>"
+		class="accordion-collapse collapse"
+		aria-labelledby="interview-heading-<%= company._id %>"
+		style="background: #1e293b; border-top: 1px solid rgba(255,255,255,0.05); overflow: visible;"
+	>
+		<!-- Accordion Body -->
+		<div class="accordion-body" style="padding: 1.5rem; color: #cbd5e1; overflow: visible;">
+			
+			<!-- Interview details grid -->
+			<div class="interview-details-card mb-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 12px; padding: 1.5rem;">
+				<div class="row g-3">
+					
+					<!-- Left Details -->
+					<div class="col-md-6" style="border-right: 1px solid rgba(255, 255, 255, 0.05); padding-right: 1.5rem;">
+						<div style="margin-bottom: 0.75rem;">
+							<span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Company Name</span>
+							<h4 style="margin: 0; color: #f8fafc; font-weight: 700;"><%= company.name %></h4>
+						</div>
+						<div style="margin-bottom: 0.75rem;">
+							<span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Date</span>
+							<p style="margin: 0; color: #f8fafc; font-weight: 600;"><%= new Date(company.date).toLocaleDateString("en-GB", { day: 'numeric', month: 'short', year: 'numeric' }) %></p>
+						</div>
+						<div style="margin-bottom: 0.75rem;">
+							<span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Match Score</span>
+							<p style="margin: 0; color: #c4b5fd; font-weight: 700; font-size: 1.1rem;"><%= matchPercent %>%</p>
+						</div>
+						<div style="margin-bottom: 0.75rem;">
+							<span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Expected Package</span>
+							<p style="margin: 0; color: #34d399; font-weight: 700;"><%= company.package || '3.5 - 5.0 LPA' %></p>
+						</div>
+						<div>
+							<span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Difficulty Level</span>
+							<p style="margin: 0;"><%= company.difficulty || 'Medium' %></p>
+						</div>
+					</div>
+
+					<!-- Right Details -->
+					<div class="col-md-6" style="padding-left: 1.5rem;">
+						<div style="margin-bottom: 1rem;">
+							<span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 0.4rem;">Interview Rounds</span>
+							<ul style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; color: #cbd5e1; list-style-type: disc;">
+								<% if (company.interviewRounds && company.interviewRounds.length > 0) { %>
+									<% company.interviewRounds.forEach(function(round) { %>
+										<li style="margin-bottom: 0.25rem;"><%= round %></li>
+									<% }); %>
+								<% } else { %>
+									<li style="margin-bottom: 0.25rem;">Aptitude</li>
+									<li style="margin-bottom: 0.25rem;">Technical</li>
+									<li style="margin-bottom: 0.25rem;">HR</li>
+								<% } %>
+							</ul>
+						</div>
+
+						<div style="margin-bottom: 1rem;">
+							<span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 0.4rem;">Required Skills</span>
+							<div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
+								<% if (reqSkillsList.length > 0) { %>
+									<% reqSkillsList.forEach(function(skill) { %>
+										<span style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border-radius: 6px; padding: 0.2rem 0.5rem; font-size: 0.8rem;"><%= skill %></span>
+									<% }); %>
+								<% } else { %>
+									<span style="font-style: italic; color: #64748b; font-size: 0.85rem;">None</span>
+								<% } %>
+							</div>
+						</div>
+
+						<div style="margin-bottom: 0.75rem;">
+							<span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 700; display: block;">Eligibility Status</span>
+							<span class="badge" style="background: <%= isEligible ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)' %>; color: <%= isEligible ? '#34d399' : '#f87171' %>; border: 1px solid <%= isEligible ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)' %>;">
+								<%= isEligible ? 'Eligible' : 'Not Eligible' %>
+							</span>
+						</div>
+
+						<div>
+							<span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 700; display: block;">Application Status</span>
+							<span class="badge" style="background: rgba(139, 92, 246, 0.15); color: #c4b5fd; text-transform: capitalize; border: 1px solid rgba(139, 92, 246, 0.3);">
+								<%= appStatus %>
+							</span>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- Candidates list / Slots scheduling -->
+			<div class="students-list mb-3" style="background: rgba(15, 23, 42, 0.25); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); padding: 1.25rem;">
+				<h5 style="color: #f8fafc; font-weight: 700; margin-bottom: 1rem;"><i class="fa-solid fa-users" style="color: #8b5cf6;"></i> Registered Candidates</h5>
+				<form
+					action="/interviews/students/add"
+					method="post"
+					id="company-<%= company._id %>-students-form"
+					class="d-flex flex-column gap-3"
+				>
+					<!-- List of Interviews in the Company -->
+					<% for(interview of company.interviews){ %>
+					<!-- Students List  -->
+					<%- include('_student-list.ejs'); %>
+					<!-- Students List  -->
+					<% } %>
+				</form>
+			</div>
+
+			<div class="d-flex align-items-center justify-content-between">
+				<!-- Add Student slot button -->
+				<button class="btn btn-outline-primary d-flex align-items-center gap-2 add-student-BTN-wrapper" style="border-color: rgba(139, 92, 246, 0.5); color: #c4b5fd; font-weight: 600; border-radius: 6px; padding: 0.4rem 1rem;">
+					<i class="fa-solid fa-circle-plus add-student-BTN" id="add-student-<%= company._id %>"></i> Add Candidate Slot
+				</button>
+
+				<!-- Delete Interview Drive -->
+				<button class="delete-interview-button btn btn-danger d-flex align-items-center gap-2" data-id="<%= company._id %>" style="background: #ef4444; border: none; font-weight: 600; border-radius: 6px; padding: 0.4rem 1rem;">
+					<i class="fa-solid fa-trash"></i> Cancel Drive
+				</button>
+			</div>
+
+		</div>
+	</div>
+</div>

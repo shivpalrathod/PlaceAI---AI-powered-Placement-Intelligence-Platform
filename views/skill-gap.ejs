@@ -1,0 +1,152 @@
+<div class="ai-section">
+  <!-- Header -->
+  <div class="page-header animate-fade-up">
+    <div class="page-header-label"><i class="fa-solid fa-chart-bar"></i> AI Analysis</div>
+    <h1 class="page-title">Skill Gap Analysis</h1>
+    <p class="page-subtitle">Compare your current skills against industry standards and get a personalized learning roadmap.</p>
+  </div>
+
+  <!-- Role Switcher -->
+  <div class="filter-bar" style="margin-bottom:2rem;">
+    <span style="font-size:0.875rem; color:var(--text-secondary); font-weight:600;">Target Role:</span>
+    <% allRoles.forEach(function(role) { %>
+    <a href="/ai/skill-gap?role=<%= encodeURIComponent(role) %>"
+       class="filter-btn <%= role === targetRole ? 'active' : '' %>">
+      <%= role %>
+    </a>
+    <% }); %>
+  </div>
+
+  <% if (!hasAnalysis) { %>
+  <!-- No Resume Warning -->
+  <div class="ai-card" style="text-align:center; padding:3rem; margin-bottom:2rem;">
+    <i class="fa-solid fa-file-circle-exclamation" style="font-size:3rem; color:var(--warning); margin-bottom:1rem;"></i>
+    <h2 style="font-size:1.25rem; font-weight:700; margin-bottom:0.5rem;">No Resume Analyzed Yet</h2>
+    <p style="color:var(--text-secondary); margin-bottom:1.5rem;">Upload your resume first to get a personalized skill gap analysis.</p>
+    <a href="/ai/resume" class="apply-btn">📄 Analyze My Resume</a>
+  </div>
+  <% } %>
+
+  <!-- Overview Row -->
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:2rem;">
+    <div class="stat-card animate-fade-up delay-1">
+      <div class="stat-icon" style="background:rgba(16,185,129,0.15); color:#6ee7b7;"><i class="fa-solid fa-check-circle"></i></div>
+      <div class="stat-value" style="color:#6ee7b7;"><%= gapAnalysis.possessed.length %></div>
+      <div class="stat-label">Skills Possessed</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-2">
+      <div class="stat-icon" style="background:rgba(239,68,68,0.15); color:#fca5a5;"><i class="fa-solid fa-circle-xmark"></i></div>
+      <div class="stat-value" style="color:#fca5a5;"><%= gapAnalysis.missing.length %></div>
+      <div class="stat-label">Skills to Learn</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-3">
+      <div class="stat-icon" style="background:rgba(99,102,241,0.15); color:#a5b4fc;"><i class="fa-solid fa-gauge-high"></i></div>
+      <div class="stat-value" style="color:#a5b4fc;"><%= gapAnalysis.matchPercent %>%</div>
+      <div class="stat-label">Role Match</div>
+    </div>
+    <div class="stat-card animate-fade-up delay-4">
+      <div class="stat-icon" style="background:rgba(245,158,11,0.15); color:#fde68a;"><i class="fa-solid fa-award"></i></div>
+      <div class="stat-value" style="font-size:1.2rem; color:#fde68a;"><%= gapAnalysis.readinessLevel %></div>
+      <div class="stat-label">Readiness Level</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-bottom:2rem;">
+    <!-- Possessed Skills -->
+    <div class="ai-card animate-fade-up delay-1">
+      <h3 style="font-size:1rem; font-weight:700; margin-bottom:1rem; color:#6ee7b7;">
+        <i class="fa-solid fa-check-circle"></i> Skills You Have (<%= gapAnalysis.possessed.length %>)
+      </h3>
+      <div>
+        <% gapAnalysis.possessed.forEach(function(skill) { %>
+        <span class="skill-tag skill-tag-success" style="margin:0.2rem;"><%= skill %></span>
+        <% }); %>
+        <% if (gapAnalysis.possessed.length === 0) { %>
+        <p style="color:var(--text-muted); font-size:0.875rem;">Upload resume to see your skills.</p>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Missing Skills -->
+    <div class="ai-card animate-fade-up delay-2">
+      <h3 style="font-size:1rem; font-weight:700; margin-bottom:1rem; color:#fca5a5;">
+        <i class="fa-solid fa-circle-xmark"></i> Skills to Learn (<%= gapAnalysis.missing.length %>)
+      </h3>
+      <div>
+        <% gapAnalysis.missing.forEach(function(skill) { %>
+        <span class="skill-tag skill-tag-danger" style="margin:0.2rem;"><%= skill %></span>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skill Gap Visual -->
+  <div class="ai-card animate-fade-up delay-2" style="margin-bottom:1.5rem;">
+    <h3 class="chart-title"><i class="fa-solid fa-chart-gantt"></i> Skill Coverage for <%= targetRole %></h3>
+    <div class="gap-bar-container" id="gapBars">
+      <% const allSkills = [...gapAnalysis.possessed, ...gapAnalysis.missing];
+         allSkills.slice(0, 16).forEach(function(skill) {
+           const has = gapAnalysis.possessed.includes(skill);
+      %>
+      <div class="gap-bar">
+        <span class="gap-bar-label" title="<%= skill %>"><%= skill %></span>
+        <div class="gap-bar-track">
+          <div class="gap-bar-fill <%= has ? '' : 'missing-fill' %>" style="width: <%= has ? '100' : '0' %>%;"></div>
+        </div>
+        <span class="gap-bar-pct">
+          <% if (has) { %>✓<% } else { %>✗<% } %>
+        </span>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <!-- Learning Roadmap -->
+  <div class="ai-card animate-fade-up delay-3" style="margin-bottom:1.5rem;">
+    <h3 class="chart-title"><i class="fa-solid fa-map"></i> Your Learning Roadmap</h3>
+    <div class="roadmap-step" style="padding-left:3rem; margin-left:0;">
+      <% gapAnalysis.roadmap.forEach(function(step, i) { %>
+      <div class="roadmap-step">
+        <div class="roadmap-dot <%= step.priority.toLowerCase() %>"><%= i + 1 %></div>
+        <div class="roadmap-content">
+          <div class="roadmap-phase"><%= step.phase %></div>
+          <div class="roadmap-desc"><%= step.description %></div>
+          <% if (step.skills.length > 0) { %>
+          <div>
+            <% step.skills.forEach(function(s) { %>
+            <span class="skill-tag skill-tag-primary" style="margin:0.15rem; font-size:0.78rem;"><%= s %></span>
+            <% }); %>
+          </div>
+          <% } %>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <!-- Learning Resources -->
+  <% if (gapAnalysis.resources.length > 0) { %>
+  <div class="ai-card animate-fade-up delay-4">
+    <h3 class="chart-title"><i class="fa-solid fa-book-open"></i> Learning Resources</h3>
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:0.75rem;">
+      <% gapAnalysis.resources.forEach(function(res) { %>
+      <a href="<%= res.url %>" target="_blank" style="display:flex; align-items:center; gap:0.5rem; padding:0.75rem; background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.2); border-radius:10px; text-decoration:none; color:var(--text-secondary); font-size:0.85rem; font-weight:600; transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.15)'; this.style.color='#a5b4fc';" onmouseout="this.style.background='rgba(99,102,241,0.08)'; this.style.color='var(--text-secondary)';">
+        <i class="fa-solid fa-link" style="color:#a5b4fc;"></i>
+        <%= res.skill %>
+      </a>
+      <% }); %>
+    </div>
+  </div>
+  <% } %>
+</div>
+
+<script>
+// Animate bars on load
+setTimeout(() => {
+  document.querySelectorAll('.gap-bar-fill').forEach(bar => {
+    const target = bar.style.width;
+    bar.style.width = '0';
+    setTimeout(() => { bar.style.width = target; }, 100);
+  });
+}, 200);
+</script>
